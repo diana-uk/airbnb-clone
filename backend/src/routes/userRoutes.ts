@@ -1,5 +1,6 @@
 import express, { Application, Request, Response } from "express";
 import { AuthController } from "../controllers/AuthController";
+import { validateRegister } from "../middleware/validation/validate.middleware";
 
 //TODO 6: Try to run first without class then see if it works
 
@@ -14,6 +15,10 @@ export class UserRoutes {
   }
 
   initializeRoutes() {
-    this.router.post("/register", this.authController.registerUser);
+    this.router.post(
+      "/register",
+      validateRegister,
+      this.authController.registerUser
+    );
   }
 }
