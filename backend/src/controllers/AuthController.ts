@@ -13,17 +13,19 @@ export class AuthController {
       // We already did validation in the middleware at this point
       const { firstName, lastName, email, password, phone, type } = req.body;
 
-      const createdUser = await this.authService.registerUser(
-        firstName,
-        lastName,
-        email,
-        password,
-        phone,
-        type
-      );
+      const { newUser: createdUser, jwtToken } =
+        await this.authService.registerUser(
+          firstName,
+          lastName,
+          email,
+          password,
+          phone,
+          type
+        );
 
       // TODO 4: Add function to create this json for success
       res
+        .cookie("token", jwtToken, { httpOnly: true, secure: true })
         .status(201)
         .json({
           success: true,
