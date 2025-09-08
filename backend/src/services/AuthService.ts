@@ -3,6 +3,7 @@ import {
   toRoleType,
 } from "../models/users.models";
 import { UserRespository } from "../repositories/user.repository";
+import { generateToken } from "../utils/jwt.util";
 
 export class AuthService {
   private userRepository: UserRespository;
@@ -29,6 +30,7 @@ export class AuthService {
     };
 
     const newUser = await this.userRepository.createUser(user);
-    return newUser;
+    const token = generateToken(newUser);
+    return { newUser, token };
   };
 }

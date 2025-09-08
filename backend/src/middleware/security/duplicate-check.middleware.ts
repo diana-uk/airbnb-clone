@@ -1,7 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { UserRespository } from "../../repositories/user.repository";
 
-export const checkDuplicateEmail = async (req: Request, res: Response) => {
+export const checkDuplicateEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { email } = req.body;
 
@@ -13,6 +17,7 @@ export const checkDuplicateEmail = async (req: Request, res: Response) => {
     }
 
     const userRepository = new UserRespository();
+    next();
     // TODO 7: Add here call to findByEmail function
 
     // TODO 8: If email exists response status is 409 with message
