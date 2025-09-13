@@ -26,7 +26,6 @@ export interface User {
   id: string;
   firstName: string;
   email: string;
-  password: string;
   lastName: string;
   phone: string;
   type: string;
