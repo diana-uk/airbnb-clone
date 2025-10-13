@@ -22,13 +22,16 @@ export function toRoleType(value: string): RoleType {
 
 // ------------------------------------- For DB Layer -------------------------------------
 // TODO 5: can we save the created at and udpated at as Date in DB?
+
+// User in the same form it saved in DB (except from password)
 export interface User {
-  id: string;
-  firstName: string;
-  email: string;
-  lastName: string;
-  phone: string;
-  type: string;
-  createdAt: Date;
-  updatedAt: Date;
+  Id: string;
+  FirstName: string;
+  Email: string;
+  LastName: string;
+  Password: string;
+  Phone: string;
+  Type: string;
+  CreatedAt: Date;
+  UpdatedAt: Date;
 }

@@ -20,5 +20,7 @@ export class UserRoutes {
       checkDuplicateEmail,
       this.authController.registerUser
     );
+
+    this.router.get("/login", this.authController.login);
   }
 }

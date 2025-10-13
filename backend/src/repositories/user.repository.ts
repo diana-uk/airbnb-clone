@@ -127,41 +127,51 @@ export class UserRespository {
     try {
       const userId = uuidv4();
       const now = new Date();
-      const result = await connection.execute(
-        "INSERT INTO USERS (Id,FirstName, LastName, Phone, Type, CreatedAt, UpdatedAt)" +
-          " VALUES  (?,?,?,?,?,?,?)",
+      const response = await connection.execute(
+        `INSERT INTO USERS (Id, FirstName, LastName,Email, Password, Phone, Type, CreatedAt, UpdatedAt) 
+        VALUES  (?,?,?,?,?,?,?,?,?)`,
         [
           userId,
           userData.firstName,
           userData.lastName,
+          userData.email,
+          userData.password,
           userData.phone,
           userData.type,
-          new Date(),
-          new Date(),
+          now,
+          now,
         ]
       );
-
+      console.log(response);
       const [rows] = (await connection.execute(
         "SELECT * FROM USERS WHERE Id = ?",
         [userId]
       )) as any[];
 
-      if (rows && Array.isArray(rows) && rows.length > 0) {
-        const dbUser = rows[0];
+      const users = rows as User[];
 
-        const insertedUser: User = {
-          id: dbUser.Id,
-          firstName: dbUser.FirstName,
-          email: dbUser.LastName,
-          lastName: dbUser.LastName,
-          phone: dbUser.Phone,
-          type: dbUser.Type,
-          createdAt: dbUser.CreatedAt,
-          updatedAt: dbUser.Update,
-        };
-        return insertedUser;
+      return users[0] || null;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  public getUserByEmail = async (email: string) => {
+    const connection = await this.dbConnectionInstance;
+
+    try {
+      const [rows] = (await connection.execute(
+        "SELECT * FROM USERS WHERE Email = ?",
+        [email]
+      )) as any[];
+
+      console.log(rows);
+      if (rows.length === 0) {
+        return null;
       }
-      return new Error("Failed to retrieve inserted user !");
+      const users = rows as User[];
+
+      return users[0];
     } catch (error) {
       throw error;
     }

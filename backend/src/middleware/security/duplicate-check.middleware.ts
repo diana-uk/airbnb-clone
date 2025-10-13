@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { UserRespository } from "../../repositories/user.repository";
+import { UserService } from "../../services/UserService";
 
 export const checkDuplicateEmail = async (
   req: Request,
@@ -10,20 +11,26 @@ export const checkDuplicateEmail = async (
     const { email } = req.body;
 
     if (!email) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         error: "Email is required.",
       });
     }
 
-    const userRepository = new UserRespository();
-    next();
-    // TODO 7: Add here call to findByEmail function
+    const userService = new UserService();
 
-    // TODO 8: If email exists response status is 409 with message
+    const emailExists = await userService.findByEmail(email);
+
+    if (emailExists) {
+      return res.status(409).json({
+        success: false,
+        error: "Email address already exists !",
+      });
+    }
+    next();
   } catch (error) {
     console.error("Error checking duplicate email: ", error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       error: "Internal server error",
     });

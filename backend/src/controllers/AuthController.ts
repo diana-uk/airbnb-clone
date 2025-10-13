@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { AuthService } from "../services/AuthService";
+import { AppError } from "../utils/AppError";
 
 export class AuthController {
   private authService: AuthService;
@@ -23,16 +24,43 @@ export class AuthController {
       );
 
       // TODO 4: Add function to create this json for success
-      res
-        .status(201)
-        .json({
-          success: true,
-          data: createdUser,
-          message: "User created successfully!",
-        });
+      res.status(201).json({
+        success: true,
+        data: createdUser,
+        message: "User created successfully!",
+      });
     } catch (error) {
       // TODO 2: Check if success false here is needed
       // TODO 3: Add function to create this json for error
+      res.status(400).json({
+        success: false,
+        error: error instanceof Error ? error.message : "An error occurred",
+      });
+    }
+  };
+
+  // Controller -> Service -> Repository/Model -> Database
+  public login = async (req: Request, res: Response) => {
+    try {
+      // TODO Login.1: Add middleware to check for the password and email if they are valid or not
+      // We already did validation in the middleware at this point (check for the)
+      const { email, password } = req.body;
+      // TODO Login.2: Authenticate by calling the service which returns the user with the jwt
+      const userWithJwt = await this.authService.login(email, password);
+
+      res.status(200).json({
+        success: true,
+        data: userWithJwt,
+        message: "User logged in successfully!",
+      });
+    } catch (error) {
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).json({
+          error: error.message,
+          data: error.data,
+        });
+      }
+      // TODO 6: Create generic error
       res.status(400).json({
         success: false,
         error: error instanceof Error ? error.message : "An error occurred",
