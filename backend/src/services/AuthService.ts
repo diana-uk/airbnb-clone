@@ -1,5 +1,7 @@
+import { mapJwtToCurrentUserDto } from "../mappers/auth.mapper";
 import { IRegisterUserDto, toRoleType, User } from "../models/users.models";
 import { UserRespository } from "../repositories/user.repository";
+import { JwtUser } from "../types/auth.types";
 import { AppError } from "../utils/AppError";
 import { generateToken } from "../utils/jwt.util";
 
@@ -27,6 +29,7 @@ export class AuthService {
       type: toRoleType(type),
     };
 
+    // TODO: NULL CHECK
     const newUser = await this.userRepository.createUser(user);
 
     const token = generateToken(newUser);
@@ -74,6 +77,14 @@ export class AuthService {
     const token = generateToken(userFromDB);
     // 4. Return user with the token
     return { token, user };
+  };
+
+  public getUser = (jwtUser: JwtUser) => {
+    if (!jwtUser) {
+      throw new AppError("Unauthorized", 401);
+    }
+    const currentUser = mapJwtToCurrentUserDto(jwtUser);
+    return currentUser;
   };
 
   private verifyPassword = (password: string, realPassword: string) => {

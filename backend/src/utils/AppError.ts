@@ -8,4 +8,10 @@ export class AppError extends Error {
     this.statusCode = statusCode;
     this.data = data;
   }
+
+  public getErrorJson = () => {
+    return {
+      errorMessage: this.data,
+    };
+  };
 }

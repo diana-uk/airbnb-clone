@@ -17,6 +17,7 @@ export const checkDuplicateEmail = async (
       });
     }
 
+    // TODO: MAKE A CONSTURCTOR OR GENERIC BOOTSTRAP
     const userService = new UserService();
 
     const emailExists = await userService.findByEmail(email);

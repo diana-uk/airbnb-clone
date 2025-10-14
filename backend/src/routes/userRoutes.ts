@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from "express";
 import { AuthController } from "../controllers/AuthController";
 import { checkDuplicateEmail } from "../middleware/security/duplicate-check.middleware";
+import { requireAuth } from "../middleware/auth/require-auth.middleware";
 
 //TODO 6: Try to run first without class then see if it works
 
@@ -22,5 +23,9 @@ export class UserRoutes {
     );
 
     this.router.get("/login", this.authController.login);
+
+    this.router.get("/me", requireAuth, this.authController.getUser);
+
+    this.router.get("/reservestion", this.authController.getUser);
   }
 }

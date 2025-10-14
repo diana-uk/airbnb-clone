@@ -35,3 +35,12 @@ export interface User {
   CreatedAt: Date;
   UpdatedAt: Date;
 }
+
+export interface CurrentUserDto {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  type: RoleType;
+}

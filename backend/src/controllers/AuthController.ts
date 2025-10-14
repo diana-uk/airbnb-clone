@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { AuthService } from "../services/AuthService";
 import { AppError } from "../utils/AppError";
+import { CustomRequest } from "../types/request.types";
+import { JwtUser } from "../types/auth.types";
 
 export class AuthController {
   private authService: AuthService;
@@ -64,6 +66,30 @@ export class AuthController {
       res.status(400).json({
         success: false,
         error: error instanceof Error ? error.message : "An error occurred",
+      });
+    }
+  };
+
+  public getUser = async (req: Request, res: Response) => {
+    try {
+      // 1. Get the JWT Payload
+      const { jwtUser } = req as CustomRequest;
+
+      const currentUser = await this.authService.getUser(jwtUser as JwtUser);
+
+      res.status(200).json({
+        success: true,
+        data: currentUser,
+        message: "Extracted user data from JWT successfully !",
+      });
+    } catch (error) {
+      if (error instanceof AppError) {
+        const appError = error as AppError;
+        // TODO: MAKE IT GENERIC THE RES.STATUS OF ERROR
+        res.status(appError.statusCode).json(appError.getErrorJson());
+      }
+      res.status(401).json({
+        errorMessage: "Unauthorized",
       });
     }
   };
