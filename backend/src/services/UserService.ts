@@ -1,5 +1,4 @@
 import { UserRespository } from "../repositories/user.repository";
-import { CustomRequest } from "../types/request.types";
 
 export class UserService {
   private userRepository: UserRespository;
