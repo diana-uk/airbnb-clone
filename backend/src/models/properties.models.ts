@@ -9,7 +9,31 @@ export interface IPropertyDto {
   bathrooms: number;
   maxGuests: number;
   amenities: string[];
-  hostUserId: number;
+}
+
+export interface PropertyDto {
+  title: string;
+  description: string;
+  address: string;
+  pricePerNight: number;
+  imageUrl: string;
+  bedrooms: number;
+  bathrooms: number;
+  maxGuests: number;
+  amenities: string[];
+}
+
+export interface Property {
+  Id: string;
+  Title: string;
+  Description: string;
+  Address: string;
+  PricePerNight: number;
+  ImageUrl: string;
+  Bedrooms: number;
+  Bathrooms: number;
+  MaxGuests: number;
+  HostUserId: number;
 }
 
 // export enum Amenity {

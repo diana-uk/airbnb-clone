@@ -3,6 +3,10 @@ import { sendResponse } from "../utils/send-response.utils";
 import { AppError } from "../utils/AppError";
 import { IPropertyDto } from "../models/properties.models";
 import { PropertyService } from "../services/PropertyService";
+import {
+  APP_RESPONSE_CODE,
+  FAILED_TO_CREATE_PROPERTY,
+} from "../config/constants";
 
 export class PropertyController {
   private propertyService: PropertyService;
@@ -11,16 +15,43 @@ export class PropertyController {
     this.propertyService = new PropertyService();
   }
 
-  private createProperty = (req: Request, res: Response) => {
+  public createProperty = async (req: Request, res: Response) => {
     try {
       // TODO CP (Create Property) 1: Add middleware check of role
       const property: IPropertyDto = req.body;
-      const createdProperty = this.propertyService.createProperty(property);
+      console.log(property);
+      const createdProperty = await this.propertyService.createProperty(
+        property
+      );
+      if (createdProperty == null) {
+        return sendResponse({
+          res: res,
+          status: APP_RESPONSE_CODE.INTERNAL_SERVER_ERROR,
+          message: FAILED_TO_CREATE_PROPERTY,
+          data: createdProperty,
+          success: false,
+        });
+      }
+      return sendResponse({
+        res: res,
+        status: 200,
+        data: createdProperty,
+        success: true,
+      });
     } catch (error) {
       if (error instanceof AppError) {
-        return sendResponse(res, error.statusCode, error.message, false);
+        return sendResponse({
+          res: res,
+          status: error.statusCode,
+          message: error?.message,
+          success: false,
+        });
       }
-      return sendResponse(res, 500, "Internal Server Error", false);
+      return sendResponse({
+        res: res,
+        status: APP_RESPONSE_CODE.INTERNAL_SERVER_ERROR,
+        success: false,
+      });
     }
   };
 }

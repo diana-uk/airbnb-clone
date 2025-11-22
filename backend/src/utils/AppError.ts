@@ -1,17 +1,16 @@
-export class AppError extends Error {
-  statusCode: number;
-  data: any;
+import { INTERNAL_SERVER_ERROR } from "../config/constants";
+import { AppResponse } from "./AppResponse";
 
-  constructor(message: string, statusCode: number, data?: any) {
-    super(message);
-
-    this.statusCode = statusCode;
-    this.data = data;
+export class AppError<T> extends AppResponse<T> {
+  constructor({
+    errorMessage = INTERNAL_SERVER_ERROR,
+    statusCode = 500,
+    data,
+  }: {
+    errorMessage?: string;
+    statusCode: number;
+    data?: T;
+  }) {
+    super(false, statusCode, data, errorMessage);
   }
-
-  public getErrorJson = () => {
-    return {
-      errorMessage: this.data,
-    };
-  };
 }

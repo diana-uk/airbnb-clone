@@ -3,6 +3,7 @@ import { AuthService } from "../services/AuthService";
 import { AppError } from "../utils/AppError";
 import { CustomRequest } from "../types/request.types";
 import { JwtUser } from "../types/auth.types";
+import { sendResponse } from "../utils/send-response.utils";
 
 export class AuthController {
   private authService: AuthService;
@@ -84,9 +85,15 @@ export class AuthController {
       });
     } catch (error) {
       if (error instanceof AppError) {
-        const appError = error as AppError;
+        const appError = error as AppError<any>;
         // TODO: MAKE IT GENERIC THE RES.STATUS OF ERROR
-        res.status(appError.statusCode).json(appError.getErrorJson());
+
+        return sendResponse({
+          res: res,
+          status: appError.statusCode,
+          message: appError.errorMessage,
+          success: false,
+        });
       }
       res.status(401).json({
         errorMessage: "Unauthorized",

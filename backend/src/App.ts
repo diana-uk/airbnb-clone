@@ -3,17 +3,21 @@ import express, { Application, Request, Response } from "express";
 import mysql from "mysql2/promise";
 import { UserRoutes } from "./routes/userRoutes";
 import { sqlConfig } from "./database/migrations/config.database";
+import { propertyRoutes } from "./routes/propertyRoutes";
 
 dotenv.config();
 
 export class App {
   public app: Application;
   private userRoutes: UserRoutes;
+  private propertyRoutes: propertyRoutes;
   private static dbConnectionInstance: mysql.Connection;
-  // TODO 1: Initialize Routes
+
+  // Initialize all routes
   public constructor() {
     this.app = express();
     this.userRoutes = new UserRoutes();
+    this.propertyRoutes = new propertyRoutes();
     this.initializeMiddleware();
     this.initalizeRoutes();
     this.initializeDatabase();
@@ -34,6 +38,7 @@ export class App {
       });
     });
     this.app.use("/auth", this.userRoutes.router);
+    this.app.use("/properties", this.propertyRoutes.router);
   }
 
   private async initializeDatabase() {

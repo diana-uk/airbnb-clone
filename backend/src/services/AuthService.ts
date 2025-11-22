@@ -1,3 +1,8 @@
+import {
+  APP_RESPONSE_CODE,
+  INCORRECT_EMAIL_AND_PASSWORD,
+  UNAUTHORIZED,
+} from "../config/constants";
 import { mapJwtToCurrentUserDto } from "../mappers/auth.mapper";
 import { IRegisterUserDto, toRoleType, User } from "../models/users.models";
 import { UserRespository } from "../repositories/user.repository";
@@ -43,9 +48,13 @@ export class AuthService {
     );
 
     if (!userFromDB) {
-      throw new AppError("Email or password are not correct !", 401, {
-        email,
-        password,
+      throw new AppError({
+        errorMessage: INCORRECT_EMAIL_AND_PASSWORD,
+        statusCode: APP_RESPONSE_CODE.UNAUTHORIZED,
+        data: {
+          email,
+          password,
+        },
       });
     }
 
@@ -58,9 +67,13 @@ export class AuthService {
     console.log("isValidPassword", isPasswordCorrect);
 
     if (!isPasswordCorrect) {
-      throw new AppError("Email or password are not correct !", 401, {
-        email,
-        password,
+      throw new AppError({
+        errorMessage: INCORRECT_EMAIL_AND_PASSWORD,
+        statusCode: APP_RESPONSE_CODE.UNAUTHORIZED,
+        data: {
+          email,
+          password,
+        },
       });
     }
 
@@ -81,7 +94,10 @@ export class AuthService {
 
   public getUser = (jwtUser: JwtUser) => {
     if (!jwtUser) {
-      throw new AppError("Unauthorized", 401);
+      throw new AppError({
+        errorMessage: UNAUTHORIZED,
+        statusCode: APP_RESPONSE_CODE.UNAUTHORIZED,
+      });
     }
     const currentUser = mapJwtToCurrentUserDto(jwtUser);
     return currentUser;
