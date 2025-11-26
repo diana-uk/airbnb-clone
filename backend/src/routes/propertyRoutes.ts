@@ -2,6 +2,7 @@ import express from "express";
 
 import { PropertyController } from "../controllers/PropertyController";
 import { requireAuth } from "../middleware/auth/require-auth.middleware";
+import { authorize } from "../middleware/auth/authorization.middleware";
 
 export class propertyRoutes {
   private propertyController: PropertyController;
@@ -13,6 +14,11 @@ export class propertyRoutes {
   }
 
   initializeRoutes() {
-    this.router.post("/", requireAuth, this.propertyController.createProperty);
+    this.router.post(
+      "/",
+      requireAuth,
+      authorize("Host"),
+      this.propertyController.createProperty
+    );
   }
 }
