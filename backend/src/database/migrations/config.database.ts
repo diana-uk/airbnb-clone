@@ -1,4 +1,3 @@
-import sql from "mssql";
 import { ConnectionOptions } from "mysql2";
 
 export const sqlConfig: ConnectionOptions = {

@@ -19,13 +19,13 @@ export class UserRoutes {
     this.router.post(
       "/register",
       checkDuplicateEmail,
-      this.authController.registerUser
+      this.authController.registerUser.bind(this.authController)
     );
 
-    this.router.get("/login", this.authController.login);
+    this.router.get("/login", this.authController.login.bind(this.authController));
 
-    this.router.get("/me", requireAuth, this.authController.getUser);
+    this.router.get("/me", requireAuth, this.authController.getUser.bind(this.authController));
 
-    this.router.get("/reservestion", this.authController.getUser);
+    this.router.get("/reservestion", this.authController.getUser.bind(this.authController));
   }
 }

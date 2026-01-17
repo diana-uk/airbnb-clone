@@ -1,0 +1,76 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch: npm run dev:debug",
+            "cwd": "${workspaceFolder}/backend",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "dev:debug"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "envFile": "${workspaceFolder}/backend/.env",
+            "autoAttachChildProcesses": true,
+            "restart": true,
+            "outputCapture": "std",
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Backend (ts-node)",
+            "cwd": "${workspaceFolder}/backend",
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register/transpile-only"
+            ],
+            "program": "${workspaceFolder}/backend/src/server.ts",
+            "envFile": "${workspaceFolder}/backend/.env",
+            "outputCapture": "std",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceFolder}/backend/dist/**/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Attach: npm run dev:debug",
+            "cwd": "${workspaceFolder}/backend",
+            "port": 9229,
+            "restart": true,
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceFolder}/backend/dist/**/*.js"
+            ],
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "preLaunchTask": "npm: dev:debug"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Compiled (dist)",
+            "cwd": "${workspaceFolder}/backend",
+            "program": "${workspaceFolder}/backend/dist/server.js",
+            "outFiles": [
+                "${workspaceFolder}/backend/dist/**/*.js"
+            ],
+            "sourceMaps": true,
+            "preLaunchTask": "npm: build - backend"
+        }
+    ]
+}

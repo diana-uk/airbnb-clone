@@ -1,9 +1,8 @@
-export class AppResponse<T> {
+export class AppResponse<T> extends Error {
   success: boolean;
   data?: T;
   errorMessage?: string;
   statusCode: number;
-  message?: string;
 
   constructor(
     success: boolean,
@@ -12,11 +11,11 @@ export class AppResponse<T> {
     message?: string,
     errorMessage?: string
   ) {
+    super(message)
     this.success = success;
     this.data = data;
     this.errorMessage = errorMessage;
     this.statusCode = statusCode;
-    this.message = message;
   }
 
   toJSON() {
@@ -25,7 +24,7 @@ export class AppResponse<T> {
       data: this.data,
       errorMessage: this.errorMessage,
       statusCode: this.statusCode,
-      message: this.message,
+      message: this.message ? this.message : undefined,
     };
   }
 }

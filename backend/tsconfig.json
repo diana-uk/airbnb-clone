@@ -111,6 +111,7 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "sourceMap": true,
     "outDir": "dist"
   },
   "include": [

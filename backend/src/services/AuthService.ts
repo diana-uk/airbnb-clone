@@ -3,7 +3,7 @@ import {
   INCORRECT_EMAIL_AND_PASSWORD,
   UNAUTHORIZED,
 } from "../config/constants";
-import { mapJwtToCurrentUserDto } from "../mappers/auth.mapper";
+import { mapJwtToCurrentUserDto } from "../mappers/auth.mappers";
 import { IRegisterUserDto, toRoleType, User } from "../models/users.models";
 import { UserRespository } from "../repositories/user.repository";
 import { JwtUser } from "../types/auth.types";

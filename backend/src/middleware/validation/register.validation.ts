@@ -1,5 +1,6 @@
 import Joi from "joi";
 
+// TODO [BNB-13] Change registerValidationSchema to use ZOD libray and put it in the validators folder
 export const registerValidationSchema = Joi.object({
   firstName: Joi.string()
     .trim()
